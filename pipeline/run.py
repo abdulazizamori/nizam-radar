@@ -80,7 +80,8 @@ def analyze(profile: BusinessProfile, reg: RegulationRecord, today: date | None 
     calls += r.calls
     w = write(profile, reg, r, today=today, client=client)
     calls += w.calls
-    trace += [f"reason: {p}" for p in r.problems] + [f"write: {p}" for p in w.problems]
+    trace += ([f"reason: {p}" for p in r.problems] + [f"reason dropped {p}" for p in r.dropped]
+              + [f"write: {p}" for p in w.problems])
 
     return AnalysisResult(
         **base,

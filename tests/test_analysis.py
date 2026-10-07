@@ -234,3 +234,14 @@ def test_closest_passage_points_repair_at_the_real_text():
 
 def test_prompt_explains_not_vat_registered():
     assert "taxable person" in rsn.PROMPT and "375,000" in rsn.PROMPT
+
+
+def test_one_bad_quote_is_dropped_not_the_whole_result():
+    data = json.loads(ultra_reply())
+    bad_ob = dict(data["obligations"][0], quote="Every cafe must integrate with Fatoora tomorrow.")
+    data["obligations"].append(bad_ob)
+    two = json.dumps(data, ensure_ascii=False)
+    r = rsn.reason(profile(), reg(), client=FakeClient(ultra=[two, two]))
+    assert r.applicability == "applies" and r.confidence == "medium" and not r.problems
+    assert len(r.obligations) == 1 and r.obligations[0].citation.quote == QUOTE
+    assert r.dropped and r.dropped[0].startswith("after repair: obligation 2")

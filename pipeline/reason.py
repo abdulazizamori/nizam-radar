@@ -4,8 +4,9 @@ Input: profile + the full regulation text. Output: applicability,
 confidence, reasoning and obligations, each with a citation.
 
 Trust rule (spec section 7), enforced here in code: every quote must appear
-in the regulation's full_text. An obligation whose quote can't be found is
-dropped, and the result becomes needs_review.
+in the regulation's full_text. An obligation whose quote can't be found
+(even after one repair round) is dropped, so no unverified quote is ever
+shown. If that leaves no verified obligation, the result is needs_review.
 """
 
 from __future__ import annotations
@@ -41,6 +42,7 @@ class ReasonResult:
     problems: list[str] = field(default_factory=list)   # why it was downgraded, for logs/eval
     failed_quotes: list[str] = field(default_factory=list)
     calls: list[LLMResponse] = field(default_factory=list)
+    dropped: list[str] = field(default_factory=list)    # obligations removed for an unverifiable quote
 
 
 def build_prompt(profile: BusinessProfile, reg: RegulationRecord) -> str:
@@ -197,7 +199,7 @@ def _enum(value, enum, default):
 
 def check(data: dict, reg: RegulationRecord) -> ReasonResult:
     """Turn Ultra's JSON into checked contract objects."""
-    problems, failed = [], []
+    problems, failed, dropped = [], [], []
     applicability = _enum(data.get("applicability"), Applicability, Applicability.needs_review.value)
     if data.get("applicability") != applicability:
         problems.append(f"unknown applicability {data.get('applicability')!r}")
@@ -220,7 +222,7 @@ def check(data: dict, reg: RegulationRecord) -> ReasonResult:
             if quote is None:
                 bad = str(ob.get("quote") or "")
                 failed.append(bad)
-                problems.append(f"obligation {i}: quote not found in full_text: {bad[:80]!r}")
+                dropped.append(f"obligation {i}: quote not found in full_text: {bad[:300]!r}")
                 continue
             desc = ob.get("description") or {}
             deadline = _parse_date(ob.get("deadline"))
@@ -246,7 +248,9 @@ def check(data: dict, reg: RegulationRecord) -> ReasonResult:
 
     if problems:
         applicability, confidence = "needs_review", "low"
-    return ReasonResult(applicability, confidence, reasoning, obligations, problems, failed)
+    elif dropped and confidence == "high":
+        confidence = "medium"
+    return ReasonResult(applicability, confidence, reasoning, obligations, problems, failed, dropped=dropped)
 
 
 REPAIR = (
@@ -276,8 +280,8 @@ def _repair(first: ReasonResult, data: dict, messages, resp, reg, model, calls, 
     if data2 is None:
         return first
     second = check(data2, reg)
-    if second.problems:
-        second.problems = ["after repair: " + p for p in second.problems]
+    second.problems = ["after repair: " + p for p in second.problems]
+    second.dropped = ["after repair: " + p for p in second.dropped]
     return second
 
 
