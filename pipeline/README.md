@@ -4,7 +4,9 @@ Pipeline (owner: Abdulaziz). Entry point: `run.analyze(profile, reg) -> Analysis
 2. `reason.py`: Ultra reads the whole regulation → applicability, confidence,
    reasoning and obligations. **Citation check in code**: every quote must be
    found in `full_text` (exact, or with whitespace differences only; the stored
-   quote is always the original text, ≤300 chars). Any failed check →
+   quote is always the original text, ≤300 chars). Matching ignores case, quote marks,
+   dashes, Arabic diacritics and letter variants. Failed quotes get one repair round
+   with Ultra; anything still failing →
    `needs_review`.
 3. `write.py`: Super turns the checked analysis into the summary (≤80 words,
    ar/en) and a checklist. Rejects Chinese characters in Arabic and retries once,
