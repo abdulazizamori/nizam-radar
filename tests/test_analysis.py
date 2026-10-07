@@ -172,3 +172,43 @@ def test_analyze_unreadable_ultra_is_needs_review():
     client = FakeClient(nano=[NANO_YES], ultra=["no json", "still no json"], super=[SUPER_OK])
     res = run.analyze(profile(), reg(), today=TODAY, client=client)
     assert res.applicability == "needs_review" and res.priority == "info"
+
+
+# --- quote matching tolerance and repair --------------------------------------
+
+def test_find_quote_tolerates_apostrophes_case_and_ellipsis():
+    text = reg("reg_026c0000a3_v1").full_text
+    i = text.index("’")
+    original = text[i - 60:i + 40]
+    found = rsn.find_quote(original.replace("’", "'").upper(), text)
+    assert found == original
+    joined = text[100:160] + " ... " + text[400:470]
+    assert rsn.find_quote(joined, text) in text
+
+
+def test_find_quote_tolerates_arabic_diacritics_and_letter_variants():
+    import re
+    text = reg("reg_ac04b7a838_v1").full_text
+    line = next(m.group(0) for m in re.finditer(r"[^\n]{60,}", text) if re.search(r"[ً-ْ]", m.group(0)))
+    plain = re.sub(r"[ً-ْـ]", "", line).replace("أ", "ا").replace("ة", "ه")
+    found = rsn.find_quote(plain[:150], text)
+    assert found is not None and found in text
+
+
+def test_ultra_fixes_its_quote_on_repair():
+    client = FakeClient(ultra=[ultra_reply(quote="Every cafe must integrate with Fatoora tomorrow."),
+                               ultra_reply()])
+    r = rsn.reason(profile(), reg(), client=client)
+    assert r.applicability == "applies" and len(r.calls) == 2 and not r.problems
+    assert r.obligations[0].citation.quote == QUOTE
+
+
+def test_still_wrong_after_repair_is_needs_review():
+    bad = ultra_reply(quote="Every cafe must integrate with Fatoora tomorrow.")
+    r = rsn.reason(profile(), reg(), client=FakeClient(ultra=[bad, bad]))
+    assert r.applicability == "needs_review" and r.problems[0].startswith("after repair")
+
+
+def test_no_repair_call_when_quotes_are_fine():
+    r = rsn.reason(profile(), reg(), client=FakeClient(ultra=[ultra_reply()]))
+    assert len(r.calls) == 1

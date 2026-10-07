@@ -38,6 +38,7 @@ class ReasonResult:
     reasoning_summary: Bilingual
     obligations: list[Obligation] = field(default_factory=list)
     problems: list[str] = field(default_factory=list)   # why it was downgraded, for logs/eval
+    failed_quotes: list[str] = field(default_factory=list)
     calls: list[LLMResponse] = field(default_factory=list)
 
 
@@ -59,25 +60,78 @@ def build_prompt(profile: BusinessProfile, reg: RegulationRecord) -> str:
 # --- citation check ----------------------------------------------------------
 
 def _strip_quotes(q: str) -> str:
-    return q.strip().strip('"“”«»\'').strip().rstrip("…").strip()
+    return q.strip().strip('"“”«»\'').strip()
+
+
+# Characters dropped before matching (Arabic diacritics, tatweel, bidi and
+# zero-width marks) and characters treated as equal (quote marks, dashes,
+# Arabic letter variants). Models often normalise these when copying.
+_DROP = set("\u064b\u064c\u064d\u064e\u064f\u0650\u0651\u0652\u0670\u0640"
+            "\u200b\u200c\u200d\u200e\u200f\u202a\u202b\u202c\u202d\u202e\u2066\u2067\u2068\u2069\ufeff")
+_SAME = str.maketrans({
+    "’": "'", "‘": "'", "`": "'", "´": "'", "“": '"', "”": '"', "«": '"', "»": '"',
+    "–": "-", "—": "-", "‐": "-", "‑": "-", "−": "-",
+    "أ": "ا", "إ": "ا", "آ": "ا", "ٱ": "ا", "ى": "ي", "ة": "ه", "ؤ": "و", "ئ": "ي",
+    "٫": ",", "،": ",", "؛": ";",
+})
+
+
+def _normalise(text: str) -> tuple[str, list[int]]:
+    """Normalised text plus, for each of its characters, the index of the
+    original character it came from (so a match maps back to the original)."""
+    out, idx = [], []
+    prev_space = False
+    for i, ch in enumerate(text):
+        if ch in _DROP:
+            continue
+        if ch.isspace():
+            if prev_space or not out:
+                continue
+            out.append(" ")
+            idx.append(i)
+            prev_space = True
+            continue
+        out.append(ch.translate(_SAME).lower())
+        idx.append(i)
+        prev_space = False
+    return "".join(out).rstrip(), idx
+
+
+def _locate(fragment: str, full_text: str, norm_text: str, idx: list[int]) -> str | None:
+    nq, _ = _normalise(fragment)
+    if len(nq) < 15:
+        return None
+    pos = norm_text.find(nq)
+    if pos == -1:
+        return None
+    return full_text[idx[pos]: idx[pos + len(nq) - 1] + 1]
 
 
 def find_quote(quote: str, full_text: str) -> str | None:
     """Return the exact span of full_text that the quote points to, or None.
 
-    Exact match first. Otherwise allow differences in whitespace only (models
-    often join lines), and return the original text so the stored quote is
-    always verbatim.
+    Matching ignores differences in whitespace, case, quote marks, dashes,
+    Arabic diacritics and Arabic letter variants (alef forms, ya/alef maqsura,
+    ta marbuta), which models often change when copying. The returned text is
+    always the original span from full_text, so the stored quote is verbatim.
+    If the model joined two passages with an ellipsis, the longest matching
+    piece is used.
     """
     q = _strip_quotes(quote or "")
     if len(q) < 15:          # too short to prove anything
         return None
     if q in full_text:
         return q
-    tokens = q.split()
-    pattern = r"\s+".join(re.escape(t) for t in tokens)
-    m = re.search(pattern, full_text)
-    return m.group(0) if m else None
+    norm_text, idx = _normalise(full_text)
+    found = _locate(q, full_text, norm_text, idx)
+    if found:
+        return found
+    pieces = sorted((p.strip() for p in re.split(r"\.\.\.|…|\[\.\.\.\]", q)), key=len, reverse=True)
+    for piece in pieces:
+        found = _locate(piece, full_text, norm_text, idx)
+        if found:
+            return found
+    return None
 
 
 def _trim(quote: str) -> str:
@@ -105,7 +159,7 @@ def _enum(value, enum, default):
 
 def check(data: dict, reg: RegulationRecord) -> ReasonResult:
     """Turn Ultra's JSON into checked contract objects."""
-    problems = []
+    problems, failed = [], []
     applicability = _enum(data.get("applicability"), Applicability, Applicability.needs_review.value)
     if data.get("applicability") != applicability:
         problems.append(f"unknown applicability {data.get('applicability')!r}")
@@ -126,7 +180,9 @@ def check(data: dict, reg: RegulationRecord) -> ReasonResult:
                 continue
             quote = find_quote(str(ob.get("quote") or ""), reg.full_text)
             if quote is None:
-                problems.append(f"obligation {i}: quote not found in full_text")
+                bad = str(ob.get("quote") or "")
+                failed.append(bad)
+                problems.append(f"obligation {i}: quote not found in full_text: {bad[:80]!r}")
                 continue
             desc = ob.get("description") or {}
             deadline = _parse_date(ob.get("deadline"))
@@ -152,7 +208,33 @@ def check(data: dict, reg: RegulationRecord) -> ReasonResult:
 
     if problems:
         applicability, confidence = "needs_review", "low"
-    return ReasonResult(applicability, confidence, reasoning, obligations, problems)
+    return ReasonResult(applicability, confidence, reasoning, obligations, problems, failed)
+
+
+REPAIR = (
+    "A program checked your quotes against the regulation text. These quotes do not appear "
+    "in the text:\n{quotes}\n\nFor each obligation with one of these quotes, replace the quote "
+    "with a passage copied exactly, character for character, from the regulation text (in its "
+    "original language, at most 300 characters), or remove that obligation if no passage "
+    "supports it. Keep everything else the same. Reply with the full JSON object only."
+)
+
+
+def _repair(first: ReasonResult, data: dict, messages, resp, reg, model, calls, client) -> ReasonResult:
+    """Give Ultra one chance to fix quotes that failed the check. The trust
+    rule still holds: whatever comes back is checked again in code."""
+    quotes = "\n".join(f"- {q[:300]}" for q in first.failed_quotes)
+    retry = messages + [{"role": "assistant", "content": resp.text},
+                        {"role": "user", "content": REPAIR.format(quotes=quotes)}]
+    fixed = chat("reason_repair", model, retry, max_tokens=8000, client=client)
+    calls.append(fixed)
+    data2 = extract_json(fixed.text)
+    if data2 is None:
+        return first
+    second = check(data2, reg)
+    if second.problems:
+        second.problems = ["after repair: " + p for p in second.problems]
+    return second
 
 
 def reason(profile: BusinessProfile, reg: RegulationRecord, client=None) -> ReasonResult:
@@ -170,6 +252,8 @@ def reason(profile: BusinessProfile, reg: RegulationRecord, client=None) -> Reas
         data = extract_json(resp.text)
         if data is not None:
             result = check(data, reg)
+            if result.failed_quotes:
+                result = _repair(result, data, messages, resp, reg, model, calls, client)
             result.calls = calls
             return result
     return ReasonResult(
