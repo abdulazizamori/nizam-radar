@@ -31,12 +31,17 @@ for env_name in ["MODEL_NANO", "MODEL_SUPER", "MODEL_ULTRA"]:
         r = client.chat.completions.create(
             model=model,
             messages=[{"role": "user", "content": PROMPT}],
-            max_tokens=300,
+            # Nemotron models may "think" first, and thinking tokens count
+            # against max_tokens, so leave room for the answer after it.
+            max_tokens=2000,
         )
         ms = int((time.time() - start) * 1000)
-        text = (r.choices[0].message.content or "").strip()
-        print(f"\n{env_name} = {model}  ({ms} ms, {r.usage.prompt_tokens} in / {r.usage.completion_tokens} out)")
-        print(text[:500])
+        msg = r.choices[0].message
+        text = (msg.content or "").strip()
+        reasoning = getattr(msg, "reasoning_content", None) or ""
+        print(f"\n{env_name} = {model}  ({ms} ms, {r.usage.prompt_tokens} in / {r.usage.completion_tokens} out, "
+              f"finish={r.choices[0].finish_reason}, thinking={len(reasoning)} chars)")
+        print(text[:500] or "(empty answer: the model spent all its tokens thinking)")
     except Exception as e:  # show the error and keep testing the other models
         print(f"\n{env_name} = {model}  FAILED: {e}")
 
