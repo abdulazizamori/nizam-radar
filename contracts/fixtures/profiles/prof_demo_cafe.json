@@ -1,0 +1,21 @@
+{
+  "profile_id": "prof_demo_cafe",
+  "schema_version": "1.1",
+  "business_name": "Bayt Al Qahwa",
+  "sector": "food_beverage",
+  "sub_activity": "cafe",
+  "city": "Jeddah",
+  "region": "Makkah",
+  "employees_saudi": 2,
+  "employees_non_saudi": 4,
+  "has_physical_premises": true,
+  "premises_area_sqm": 85,
+  "serves_food_onsite": true,
+  "sells_online": false,
+  "uses_delivery_apps": true,
+  "revenue_band": "375k_to_1m",
+  "vat_registered": true,
+  "preferred_lang": "ar",
+  "notify_email": null,
+  "created_at": "2026-10-06T10:30:00+03:00"
+}

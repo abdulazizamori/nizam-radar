@@ -1,0 +1,18 @@
+# secrets
+.env
+*.key
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# os / editors
+.DS_Store
+.vscode/
+.idea/
+
+# node (web app)
+node_modules/
+.next/

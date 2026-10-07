@@ -1,0 +1,91 @@
+{
+  "$defs": {
+    "ChatCitation": {
+      "additionalProperties": false,
+      "properties": {
+        "regulation_id": {
+          "title": "Regulation Id",
+          "type": "string"
+        },
+        "article_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Article Ref"
+        },
+        "quote": {
+          "maxLength": 300,
+          "title": "Quote",
+          "type": "string"
+        },
+        "source_url": {
+          "title": "Source Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "regulation_id",
+        "quote",
+        "source_url"
+      ],
+      "title": "ChatCitation",
+      "type": "object"
+    },
+    "Confidence": {
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ],
+      "title": "Confidence",
+      "type": "string"
+    },
+    "Lang": {
+      "enum": [
+        "ar",
+        "en"
+      ],
+      "title": "Lang",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "answer": {
+      "title": "Answer",
+      "type": "string"
+    },
+    "lang": {
+      "$ref": "#/$defs/Lang"
+    },
+    "confidence": {
+      "$ref": "#/$defs/Confidence"
+    },
+    "citations": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ChatCitation"
+      },
+      "title": "Citations",
+      "type": "array"
+    },
+    "model": {
+      "title": "Model",
+      "type": "string"
+    }
+  },
+  "required": [
+    "answer",
+    "lang",
+    "confidence",
+    "model"
+  ],
+  "title": "ChatResponse",
+  "type": "object"
+}

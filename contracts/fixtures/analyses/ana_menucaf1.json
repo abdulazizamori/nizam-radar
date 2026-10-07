@@ -1,0 +1,91 @@
+{
+  "analysis_id": "ana_menucaf1",
+  "schema_version": "1.1",
+  "regulation_id": "reg_8cd5ff5b8d_v1",
+  "profile_id": "prof_demo_cafe",
+  "created_at": "2026-10-07T10:30:00+03:00",
+  "filter": {
+    "relevant": true,
+    "reason": "Menu labelling rule for food establishments; the cafe has a menu and uses delivery apps."
+  },
+  "applicability": "applies",
+  "confidence": "high",
+  "reasoning_summary": {
+    "ar": "المقهى منشأة غذائية تقدم مشروبات ووجبات ولديه قائمة طعام ويستخدم تطبيقات التوصيل، والمتطلبات تشمل القوائم الورقية والإلكترونية.",
+    "en": "The cafe is a food establishment with a menu and uses delivery apps, and the rule covers paper and online menus alike."
+  },
+  "obligations": [
+    {
+      "obligation_id": "obl_1",
+      "description": {
+        "ar": "عرض محتوى الكافيين ووسم الملّاحة ومدة حرق السعرات في قائمة الطعام.",
+        "en": "Show caffeine content, the salt-shaker label and calorie-burn time on your menu."
+      },
+      "deadline": "2025-07-01",
+      "deadline_type": "fixed_date",
+      "deadline_text": "ابتداءً من الأول من يوليو 2025م",
+      "penalty": null,
+      "citation": {
+        "article_ref": null,
+        "quote": "ابتداءً من الأول من يوليو 2025م، ستلتزم المنشآت الغذائية بعرض معلومات تغذوية مفصّلة في قوائم الطعام",
+        "source_url": "https://oldsfda.sfda.gov.sa/ar/news/3745904"
+      }
+    },
+    {
+      "obligation_id": "obl_2",
+      "description": {
+        "ar": "تطبيق نفس المعلومات على قوائمكم في تطبيقات التوصيل.",
+        "en": "Apply the same information to your menus on delivery apps."
+      },
+      "deadline": null,
+      "deadline_type": "none",
+      "deadline_text": null,
+      "penalty": null,
+      "citation": {
+        "article_ref": null,
+        "quote": "هذه المتطلبات تنطبق على جميع قوائم الطعام، سواءً كانت ورقية أو إلكترونية وتشمل منصات طلبات الطعام الإلكترونية.",
+        "source_url": "https://oldsfda.sfda.gov.sa/ar/news/3745904"
+      }
+    }
+  ],
+  "next_deadline": "2025-07-01",
+  "priority": "urgent",
+  "summary": {
+    "ar": "منذ 1 يوليو 2025 يجب أن تعرض قوائم الطعام محتوى الكافيين في المشروبات، ووسم الملّاحة بجانب الوجبات عالية الملح، والمدة اللازمة لحرق السعرات. ينطبق ذلك على القائمة الورقية وقوائم تطبيقات التوصيل.",
+    "en": "Since July 1, 2025, menus must show caffeine content for drinks, a salt-shaker label next to high-salt meals, and the time needed to burn the calories. This applies to your printed menu and your delivery-app menus."
+  },
+  "checklist": [
+    {
+      "item_id": "chk_1",
+      "text_ar": "احسب الكافيين لكل مشروب عبر حاسبة الهيئة",
+      "text_en": "Calculate caffeine for each drink with SFDA's calculator",
+      "due_date": "2026-10-14",
+      "done": false
+    },
+    {
+      "item_id": "chk_2",
+      "text_ar": "حدّث القائمة الورقية بالمعلومات الجديدة",
+      "text_en": "Update the printed menu with the new labels",
+      "due_date": "2026-10-21",
+      "done": false
+    },
+    {
+      "item_id": "chk_3",
+      "text_ar": "حدّث القوائم في تطبيقات التوصيل",
+      "text_en": "Update your delivery-app menus",
+      "due_date": "2026-10-21",
+      "done": false
+    }
+  ],
+  "models_used": {
+    "filter": "hand-written fixture",
+    "reasoning": "hand-written fixture",
+    "writer": "hand-written fixture"
+  },
+  "usage": {
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0
+  },
+  "notified_at": null
+}

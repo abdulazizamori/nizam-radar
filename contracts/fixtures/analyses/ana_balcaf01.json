@@ -1,0 +1,107 @@
+{
+  "analysis_id": "ana_balcaf01",
+  "schema_version": "1.1",
+  "regulation_id": "reg_2ab88e2596_v1",
+  "profile_id": "prof_demo_cafe",
+  "created_at": "2026-10-07T10:30:00+03:00",
+  "filter": {
+    "relevant": true,
+    "reason": "Municipal requirements for restaurants and cafes."
+  },
+  "applicability": "applies",
+  "confidence": "high",
+  "reasoning_summary": {
+    "ar": "الاشتراطات تنظم المطاعم والمقاهي، والمقهى له موقع فعلي ويقدم الطعام في المكان.",
+    "en": "The requirements cover restaurants and cafes, and the cafe has physical premises and serves food on site."
+  },
+  "obligations": [
+    {
+      "obligation_id": "obl_1",
+      "description": {
+        "ar": "الحصول على الترخيص البلدي وتجديده قبل انتهائه.",
+        "en": "Hold a valid municipal license and renew it before it expires."
+      },
+      "deadline": null,
+      "deadline_type": "none",
+      "deadline_text": null,
+      "penalty": null,
+      "citation": {
+        "article_ref": "Section 5.1",
+        "quote": "The municipal license must be obtained before commencing operations.",
+        "source_url": "https://balady.gov.sa/sites/default/files/2026-07/ashtratat%20almta%60m%20%28English%20Version%29_0.pdf"
+      }
+    },
+    {
+      "obligation_id": "obl_2",
+      "description": {
+        "ar": "حصول جميع العاملين على شهادة صحية.",
+        "en": "Make sure every worker has a health certificate."
+      },
+      "deadline": null,
+      "deadline_type": "none",
+      "deadline_text": null,
+      "penalty": null,
+      "citation": {
+        "article_ref": "Section 5.10",
+        "quote": "All workers in the food establishment must obtain a health certificate.",
+        "source_url": "https://balady.gov.sa/sites/default/files/2026-07/ashtratat%20almta%60m%20%28English%20Version%29_0.pdf"
+      }
+    },
+    {
+      "obligation_id": "obl_3",
+      "description": {
+        "ar": "عرض لوحات مسببات الحساسية والسعرات الحرارية.",
+        "en": "Display allergen and calorie information boards."
+      },
+      "deadline": null,
+      "deadline_type": "none",
+      "deadline_text": null,
+      "penalty": null,
+      "citation": {
+        "article_ref": "Section 5.2",
+        "quote": "including allergen boards and calorie information for food products.",
+        "source_url": "https://balady.gov.sa/sites/default/files/2026-07/ashtratat%20almta%60m%20%28English%20Version%29_0.pdf"
+      }
+    }
+  ],
+  "next_deadline": null,
+  "priority": "important",
+  "summary": {
+    "ar": "اشتراطات وزارة البلديات والإسكان للمطاعم والمقاهي (2025) تتطلب ترخيصًا بلديًا ساريًا، وشهادات صحية لجميع العاملين، ولوحات توعوية تشمل مسببات الحساسية والسعرات الحرارية، إضافة إلى متطلبات المكان والتجهيزات.",
+    "en": "The Ministry of Municipalities and Housing's 2025 restaurant requirements call for a valid municipal license, health certificates for all workers, and awareness boards that include allergens and calories, alongside premises and equipment rules."
+  },
+  "checklist": [
+    {
+      "item_id": "chk_1",
+      "text_ar": "تحقق من تاريخ انتهاء الترخيص البلدي",
+      "text_en": "Check your municipal license expiry date",
+      "due_date": null,
+      "done": false
+    },
+    {
+      "item_id": "chk_2",
+      "text_ar": "تحقق من الشهادات الصحية للعاملين الستة",
+      "text_en": "Check health certificates for all 6 workers",
+      "due_date": null,
+      "done": false
+    },
+    {
+      "item_id": "chk_3",
+      "text_ar": "علّق لوحة مسببات الحساسية والسعرات",
+      "text_en": "Put up the allergen and calorie board",
+      "due_date": null,
+      "done": false
+    }
+  ],
+  "models_used": {
+    "filter": "hand-written fixture",
+    "reasoning": "hand-written fixture",
+    "writer": "hand-written fixture"
+  },
+  "usage": {
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0
+  },
+  "notified_at": null
+}

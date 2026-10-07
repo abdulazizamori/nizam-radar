@@ -1,0 +1,84 @@
+{
+  "analysis_id": "ana_poiscaf1",
+  "schema_version": "1.1",
+  "regulation_id": "reg_ac04b7a838_v1",
+  "profile_id": "prof_demo_cafe",
+  "created_at": "2026-10-07T10:30:00+03:00",
+  "filter": {
+    "relevant": true,
+    "reason": "Penalty table covers restaurants and food outlets; the cafe serves food on site."
+  },
+  "applicability": "likely_applies",
+  "confidence": "medium",
+  "reasoning_summary": {
+    "ar": "الجدول يشمل المطاعم ومنافذ البيع، لكنه لا يطبق إلا عند وقوع حادثة تسمم غذائي، لذلك هو يُرجّح انطباقه وليس التزامًا يوميًا.",
+    "en": "The table covers restaurants and food outlets, but it only bites if a food poisoning incident happens, so it likely applies rather than being a daily task."
+  },
+  "obligations": [
+    {
+      "obligation_id": "obl_1",
+      "description": {
+        "ar": "الالتزام بممارسات النظافة وحفظ الأغذية لتجنب أي حادثة تسمم؛ الغرامات تحتسب عن كل متضرر.",
+        "en": "Keep hygiene and food storage practices tight to avoid any poisoning incident; fines are charged per affected person."
+      },
+      "deadline": null,
+      "deadline_type": "none",
+      "deadline_text": null,
+      "penalty": "Fines per affected person (for restaurants and outlets, from 3,000 SAR depending on the violation); doubled if repeated within a year; no warning first.",
+      "citation": {
+        "article_ref": "أولا",
+        "quote": "منافذ البيع، المطاعم، المطابخ\nالعامة، شركات النقل، تطبيقات\nالتوصيل المرتبطة بها",
+        "source_url": "https://oldsfda.sfda.gov.sa/sites/default/files/2026-04/F48-4SA102.pdf"
+      }
+    },
+    {
+      "obligation_id": "obl_2",
+      "description": {
+        "ar": "العلم بأن الغرامة تضاعف عند التكرار خلال سنة، ولا يوجد إنذار مسبق.",
+        "en": "Know that fines double for a repeat within a year and there is no prior warning."
+      },
+      "deadline": null,
+      "deadline_type": "none",
+      "deadline_text": null,
+      "penalty": "No warning principle; fine doubled on repeat within one year.",
+      "citation": {
+        "article_ref": "بنود عامة",
+        "quote": "لا ينطبق مبدأ الإنذار على مخالفات جدول عقوبات حوادث التسمم أعلاه.",
+        "source_url": "https://oldsfda.sfda.gov.sa/sites/default/files/2026-04/F48-4SA102.pdf"
+      }
+    }
+  ],
+  "next_deadline": null,
+  "priority": "urgent",
+  "summary": {
+    "ar": "اعتمدت هيئة الغذاء والدواء جدول غرامات لحوادث التسمم الغذائي يشمل المطاعم ومنافذ البيع، تحتسب عن كل شخص متضرر، دون إنذار مسبق، وتتضاعف عند التكرار خلال سنة.",
+    "en": "SFDA approved a fines table for food poisoning incidents that covers restaurants and food outlets. Fines are charged per affected person, with no prior warning, and double if repeated within a year."
+  },
+  "checklist": [
+    {
+      "item_id": "chk_1",
+      "text_ar": "راجع سجلات النظافة وحرارة التخزين أسبوعيًا",
+      "text_en": "Review hygiene and storage temperature logs weekly",
+      "due_date": null,
+      "done": false
+    },
+    {
+      "item_id": "chk_2",
+      "text_ar": "تأكد من سلامة العاملين وشهاداتهم الصحية",
+      "text_en": "Check staff health and health certificates",
+      "due_date": null,
+      "done": false
+    }
+  ],
+  "models_used": {
+    "filter": "hand-written fixture",
+    "reasoning": "hand-written fixture",
+    "writer": "hand-written fixture"
+  },
+  "usage": {
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0
+  },
+  "notified_at": null
+}

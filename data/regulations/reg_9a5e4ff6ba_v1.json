@@ -1,0 +1,26 @@
+{
+  "regulation_id": "reg_9a5e4ff6ba_v1",
+  "schema_version": "1.1",
+  "version": 1,
+  "supersedes": null,
+  "source_id": "zatca",
+  "source_url": "https://zatca.gov.sa/en/MediaCenter/News/Pages/Wave25-E-invoicing.aspx",
+  "issuing_authority": "Zakat, Tax and Customs Authority",
+  "title_original": "ZATCA Determines the Criteria for Selecting the Targeted Taxpayers in Wave 25 for “Integration Phase” of E-invoicing",
+  "title_en": "ZATCA Determines the Criteria for Selecting the Targeted Taxpayers in Wave 25 for “Integration Phase” of E-invoicing",
+  "language_original": "en",
+  "doc_type": "announcement",
+  "status": "published",
+  "published_date": "2026-07-24",
+  "effective_date": null,
+  "consultation_deadline": null,
+  "full_text": "ZATCA Determines the Criteria for Selecting the Targeted Taxpayers in Wave 25 for “Integration Phase” of E-invoicing\n\n24 July 2026\nThe Zakat, Tax and Customs Authority (ZATCA) determined the criteria for selecting the targeted taxpayers in the Twenty-Fifth Wave for implementing the \"Integration Phase \" of E-invoicing, as it clarified that the Twenty-Fifth Wave included all taxpayers whose revenues subject to VAT exceeded (SAR 187,500) during 2022, 2023,2024 or 2025.\n\nMoreover, ZATCA explained that it will notify all targeted taxpayers in the Twenty-Fifth Wave to integrate their E-invoicing solutions with the Fatoora Platform by no later than February 1, 2027.\n\nZATCA has stated that Phase Two (Integration Phase) requires additional requirements, compared to the Phase One (Generation Phase), the most prominent of which is to integrate taxpayers’ E-invoicing solutions with ZATCA's platform (Fatoora), issue E-invoices based on a specific format, and include additional fields in the invoice. Furthermore, Phase Two (Integration Phase) of E-invoicing would take place gradually in waves, and ZATCA would inform the following waves directly at least six months before their Integration Date.\n\nZATCA has noted that the launch of Phase Two of E-invoicing is part of the economic development and digital transformation taking place in the Kingdom of Saudi Arabia and is a continuation of the success story that began with Phase One of the implementation of E-invoicing, which achieved positive results, most notably raising the level of consumer protection in the Kingdom and praising the great awareness of taxpayers and the rapidity of the response in the implementation of Phase One (Generation phase) of the project.\n\nIt is worth mentioning that Phase One (Generation Phase) of E-invoicing was introduced on December 4, 2021, obliging taxpayers subject to the E-invoicing Regulation to stop generating handwritten invoices or computer-generated invoices through text editing software or spreadsheet software, ensuring that there is a technical solution for E-invoicing that is compatible with the requirements, in addition to generating and storing E-invoices with the required fields, including the QR code and other requirements.",
+  "articles": null,
+  "content_hash": "cd6166d0f4cc66110137429bff8129a342155e4da64d27e0853523c1acc47f9e",
+  "retrieved_at": "2026-10-07T10:15:00+03:00",
+  "collector_meta": {
+    "tavily_query": null,
+    "tavily_score": null,
+    "extractor": "manual_copy_paste"
+  }
+}
