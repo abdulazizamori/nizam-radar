@@ -1,0 +1,145 @@
+{
+  "$defs": {
+    "Lang": {
+      "enum": [
+        "ar",
+        "en"
+      ],
+      "title": "Lang",
+      "type": "string"
+    },
+    "RevenueBand": {
+      "enum": [
+        "lt_375k",
+        "375k_to_1m",
+        "1m_to_40m",
+        "gt_40m"
+      ],
+      "title": "RevenueBand",
+      "type": "string"
+    },
+    "Sector": {
+      "enum": [
+        "food_beverage"
+      ],
+      "title": "Sector",
+      "type": "string"
+    },
+    "SubActivity": {
+      "enum": [
+        "cafe",
+        "restaurant",
+        "bakery",
+        "food_truck",
+        "cloud_kitchen"
+      ],
+      "title": "SubActivity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "POST /profiles body: a BusinessProfile without profile_id and created_at.",
+  "properties": {
+    "schema_version": {
+      "default": "1.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "business_name": {
+      "title": "Business Name",
+      "type": "string"
+    },
+    "sector": {
+      "$ref": "#/$defs/Sector"
+    },
+    "sub_activity": {
+      "$ref": "#/$defs/SubActivity"
+    },
+    "city": {
+      "title": "City",
+      "type": "string"
+    },
+    "region": {
+      "title": "Region",
+      "type": "string"
+    },
+    "employees_saudi": {
+      "minimum": 0,
+      "title": "Employees Saudi",
+      "type": "integer"
+    },
+    "employees_non_saudi": {
+      "minimum": 0,
+      "title": "Employees Non Saudi",
+      "type": "integer"
+    },
+    "has_physical_premises": {
+      "title": "Has Physical Premises",
+      "type": "boolean"
+    },
+    "premises_area_sqm": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Premises Area Sqm"
+    },
+    "serves_food_onsite": {
+      "title": "Serves Food Onsite",
+      "type": "boolean"
+    },
+    "sells_online": {
+      "title": "Sells Online",
+      "type": "boolean"
+    },
+    "uses_delivery_apps": {
+      "title": "Uses Delivery Apps",
+      "type": "boolean"
+    },
+    "revenue_band": {
+      "$ref": "#/$defs/RevenueBand"
+    },
+    "vat_registered": {
+      "title": "Vat Registered",
+      "type": "boolean"
+    },
+    "preferred_lang": {
+      "$ref": "#/$defs/Lang"
+    },
+    "notify_email": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notify Email"
+    }
+  },
+  "required": [
+    "business_name",
+    "sector",
+    "sub_activity",
+    "city",
+    "region",
+    "employees_saudi",
+    "employees_non_saudi",
+    "has_physical_premises",
+    "serves_food_onsite",
+    "sells_online",
+    "uses_delivery_apps",
+    "revenue_band",
+    "vat_registered",
+    "preferred_lang"
+  ],
+  "title": "BusinessProfileCreate",
+  "type": "object"
+}

@@ -1,0 +1,147 @@
+{
+  "$defs": {
+    "Applicability": {
+      "enum": [
+        "applies",
+        "likely_applies",
+        "does_not_apply",
+        "needs_review"
+      ],
+      "title": "Applicability",
+      "type": "string"
+    },
+    "Bilingual": {
+      "additionalProperties": false,
+      "properties": {
+        "ar": {
+          "title": "Ar",
+          "type": "string"
+        },
+        "en": {
+          "title": "En",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ar",
+        "en"
+      ],
+      "title": "Bilingual",
+      "type": "object"
+    },
+    "DocType": {
+      "enum": [
+        "new_law",
+        "amendment",
+        "draft_consultation",
+        "circular",
+        "announcement",
+        "guide"
+      ],
+      "title": "DocType",
+      "type": "string"
+    },
+    "Priority": {
+      "enum": [
+        "urgent",
+        "important",
+        "info"
+      ],
+      "title": "Priority",
+      "type": "string"
+    },
+    "SourceId": {
+      "enum": [
+        "boe_laws",
+        "uqn_gazette",
+        "istitlaa",
+        "balady",
+        "sfda",
+        "hrsd_qiwa",
+        "zatca",
+        "mc_commerce",
+        "news"
+      ],
+      "title": "SourceId",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "analysis_id": {
+      "title": "Analysis Id",
+      "type": "string"
+    },
+    "regulation_id": {
+      "title": "Regulation Id",
+      "type": "string"
+    },
+    "title": {
+      "$ref": "#/$defs/Bilingual"
+    },
+    "issuing_authority": {
+      "title": "Issuing Authority",
+      "type": "string"
+    },
+    "source_id": {
+      "$ref": "#/$defs/SourceId"
+    },
+    "doc_type": {
+      "$ref": "#/$defs/DocType"
+    },
+    "applicability": {
+      "$ref": "#/$defs/Applicability"
+    },
+    "priority": {
+      "$ref": "#/$defs/Priority"
+    },
+    "next_deadline": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Next Deadline"
+    },
+    "checklist_done": {
+      "title": "Checklist Done",
+      "type": "integer"
+    },
+    "checklist_total": {
+      "title": "Checklist Total",
+      "type": "integer"
+    },
+    "published_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Published Date"
+    }
+  },
+  "required": [
+    "analysis_id",
+    "regulation_id",
+    "title",
+    "issuing_authority",
+    "source_id",
+    "doc_type",
+    "applicability",
+    "priority",
+    "checklist_done",
+    "checklist_total"
+  ],
+  "title": "AlertItem",
+  "type": "object"
+}

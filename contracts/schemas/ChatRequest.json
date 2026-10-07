@@ -1,0 +1,76 @@
+{
+  "$defs": {
+    "ChatTurn": {
+      "additionalProperties": false,
+      "properties": {
+        "role": {
+          "enum": [
+            "user",
+            "assistant"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "content": {
+          "title": "Content",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "content"
+      ],
+      "title": "ChatTurn",
+      "type": "object"
+    },
+    "Lang": {
+      "enum": [
+        "ar",
+        "en"
+      ],
+      "title": "Lang",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "profile_id": {
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "regulation_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Regulation Id"
+    },
+    "lang": {
+      "$ref": "#/$defs/Lang"
+    },
+    "message": {
+      "title": "Message",
+      "type": "string"
+    },
+    "history": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ChatTurn"
+      },
+      "title": "History",
+      "type": "array"
+    }
+  },
+  "required": [
+    "profile_id",
+    "lang",
+    "message"
+  ],
+  "title": "ChatRequest",
+  "type": "object"
+}

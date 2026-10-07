@@ -1,0 +1,53 @@
+{
+  "analysis_id": "ana_einvck01",
+  "schema_version": "1.1",
+  "regulation_id": "reg_026c0000a3_v1",
+  "profile_id": "prof_cloud_kitchen_riyadh",
+  "created_at": "2026-10-07T10:30:00+03:00",
+  "filter": {
+    "relevant": true,
+    "reason": "VAT e-invoicing rule; checking whether this kitchen is a taxable person."
+  },
+  "applicability": "does_not_apply",
+  "confidence": "medium",
+  "reasoning_summary": {
+    "ar": "المطبخ غير مسجل في ضريبة القيمة المضافة وإيراداته أقل من 375 ألف ريال، واللائحة تخاطب الخاضعين للضريبة فقط.",
+    "en": "The kitchen is not VAT-registered and earns under SAR 375k, and the regulation only covers taxable persons."
+  },
+  "obligations": [
+    {
+      "obligation_id": "obl_1",
+      "description": {
+        "ar": "لا يوجد التزام حاليًا؛ أعد التقييم إذا سجلت في ضريبة القيمة المضافة.",
+        "en": "No obligation now; re-check if you register for VAT."
+      },
+      "deadline": null,
+      "deadline_type": "none",
+      "deadline_text": null,
+      "penalty": null,
+      "citation": {
+        "article_ref": "Article Three",
+        "quote": "1. Taxable person that is a resident in the Kingdom.",
+        "source_url": "https://zatca.gov.sa/en/E-Invoicing/Introduction/LawsAndRegulations/Documents/E-invoicing-Regulations.pdf"
+      }
+    }
+  ],
+  "next_deadline": null,
+  "priority": "info",
+  "summary": {
+    "ar": "لائحة الفوترة الإلكترونية تخص المنشآت الخاضعة للضريبة. مطبخك غير مسجل حاليًا، لذلك لا تنطبق عليك الآن.",
+    "en": "The E-invoicing Regulation covers VAT-registered businesses. Your kitchen is not registered, so it does not apply to you for now."
+  },
+  "checklist": [],
+  "models_used": {
+    "filter": "hand-written fixture",
+    "reasoning": "hand-written fixture",
+    "writer": "hand-written fixture"
+  },
+  "usage": {
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0
+  },
+  "notified_at": null
+}

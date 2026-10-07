@@ -1,0 +1,61 @@
+{
+  "analysis_id": "ana_einvcaf1",
+  "schema_version": "1.1",
+  "regulation_id": "reg_026c0000a3_v1",
+  "profile_id": "prof_demo_cafe",
+  "created_at": "2026-10-07T10:30:00+03:00",
+  "filter": {
+    "relevant": true,
+    "reason": "VAT e-invoicing obligations; the cafe is VAT-registered."
+  },
+  "applicability": "applies",
+  "confidence": "high",
+  "reasoning_summary": {
+    "ar": "المقهى خاضع لضريبة القيمة المضافة ومقيم في المملكة، فيلزمه إصدار فواتير إلكترونية.",
+    "en": "The cafe is a VAT-registered business resident in Saudi Arabia, so it must issue electronic invoices."
+  },
+  "obligations": [
+    {
+      "obligation_id": "obl_1",
+      "description": {
+        "ar": "إصدار فواتير إلكترونية لكل المعاملات التي تتطلب فاتورة ضريبية.",
+        "en": "Issue electronic invoices for every transaction that needs a tax invoice."
+      },
+      "deadline": null,
+      "deadline_type": "none",
+      "deadline_text": null,
+      "penalty": null,
+      "citation": {
+        "article_ref": "Article Three",
+        "quote": "must\nissue Electronic Invoices in respect of all their transactions which re-quire the issuance of tax\ninvoices",
+        "source_url": "https://zatca.gov.sa/en/E-Invoicing/Introduction/LawsAndRegulations/Documents/E-invoicing-Regulations.pdf"
+      }
+    }
+  ],
+  "next_deadline": null,
+  "priority": "important",
+  "summary": {
+    "ar": "لائحة الفوترة الإلكترونية تلزم كل خاضع للضريبة مقيم في المملكة بإصدار الفواتير والإشعارات إلكترونيًا، ولا تعتبر الفواتير الورقية الممسوحة فواتير إلكترونية.",
+    "en": "The E-invoicing Regulation requires every VAT-registered business resident in Saudi Arabia to issue invoices and notes electronically. Scanned paper invoices do not count."
+  },
+  "checklist": [
+    {
+      "item_id": "chk_1",
+      "text_ar": "تأكد أن نظام نقاط البيع يصدر فواتير برمز QR",
+      "text_en": "Confirm your POS issues invoices with a QR code",
+      "due_date": null,
+      "done": false
+    }
+  ],
+  "models_used": {
+    "filter": "hand-written fixture",
+    "reasoning": "hand-written fixture",
+    "writer": "hand-written fixture"
+  },
+  "usage": {
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0
+  },
+  "notified_at": null
+}

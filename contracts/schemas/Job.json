@@ -1,0 +1,115 @@
+{
+  "$defs": {
+    "JobKind": {
+      "enum": [
+        "collect",
+        "analyze",
+        "notify"
+      ],
+      "title": "JobKind",
+      "type": "string"
+    },
+    "JobProgress": {
+      "additionalProperties": false,
+      "properties": {
+        "done": {
+          "default": 0,
+          "title": "Done",
+          "type": "integer"
+        },
+        "total": {
+          "default": 0,
+          "title": "Total",
+          "type": "integer"
+        }
+      },
+      "title": "JobProgress",
+      "type": "object"
+    },
+    "JobStatus": {
+      "enum": [
+        "queued",
+        "running",
+        "done",
+        "failed"
+      ],
+      "title": "JobStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "job_id": {
+      "pattern": "^job_[a-z0-9]+$",
+      "title": "Job Id",
+      "type": "string"
+    },
+    "kind": {
+      "$ref": "#/$defs/JobKind"
+    },
+    "status": {
+      "$ref": "#/$defs/JobStatus"
+    },
+    "progress": {
+      "$ref": "#/$defs/JobProgress"
+    },
+    "profile_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Profile Id"
+    },
+    "started_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Started At"
+    },
+    "finished_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Finished At"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error"
+    }
+  },
+  "required": [
+    "job_id",
+    "kind",
+    "status",
+    "progress"
+  ],
+  "title": "Job",
+  "type": "object"
+}

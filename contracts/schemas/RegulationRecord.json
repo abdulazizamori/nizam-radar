@@ -1,0 +1,273 @@
+{
+  "$defs": {
+    "Article": {
+      "additionalProperties": false,
+      "properties": {
+        "article_ref": {
+          "title": "Article Ref",
+          "type": "string"
+        },
+        "text": {
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "article_ref",
+        "text"
+      ],
+      "title": "Article",
+      "type": "object"
+    },
+    "CollectorMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "tavily_query": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tavily Query"
+        },
+        "tavily_score": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tavily Score"
+        },
+        "extractor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Extractor"
+        }
+      },
+      "title": "CollectorMeta",
+      "type": "object"
+    },
+    "DocType": {
+      "enum": [
+        "new_law",
+        "amendment",
+        "draft_consultation",
+        "circular",
+        "announcement",
+        "guide"
+      ],
+      "title": "DocType",
+      "type": "string"
+    },
+    "Lang": {
+      "enum": [
+        "ar",
+        "en"
+      ],
+      "title": "Lang",
+      "type": "string"
+    },
+    "RegStatus": {
+      "enum": [
+        "draft",
+        "published",
+        "effective",
+        "repealed"
+      ],
+      "title": "RegStatus",
+      "type": "string"
+    },
+    "SourceId": {
+      "enum": [
+        "boe_laws",
+        "uqn_gazette",
+        "istitlaa",
+        "balady",
+        "sfda",
+        "hrsd_qiwa",
+        "zatca",
+        "mc_commerce",
+        "news"
+      ],
+      "title": "SourceId",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "regulation_id": {
+      "pattern": "^reg_[0-9a-f]{10}_v\\d+$",
+      "title": "Regulation Id",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "supersedes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Supersedes"
+    },
+    "schema_version": {
+      "default": "1.1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_id": {
+      "$ref": "#/$defs/SourceId"
+    },
+    "source_url": {
+      "title": "Source Url",
+      "type": "string"
+    },
+    "issuing_authority": {
+      "title": "Issuing Authority",
+      "type": "string"
+    },
+    "title_original": {
+      "title": "Title Original",
+      "type": "string"
+    },
+    "title_en": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Title En"
+    },
+    "language_original": {
+      "$ref": "#/$defs/Lang"
+    },
+    "doc_type": {
+      "$ref": "#/$defs/DocType"
+    },
+    "status": {
+      "$ref": "#/$defs/RegStatus"
+    },
+    "published_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Published Date"
+    },
+    "effective_date": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective Date"
+    },
+    "consultation_deadline": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Consultation Deadline"
+    },
+    "full_text": {
+      "minLength": 200,
+      "title": "Full Text",
+      "type": "string"
+    },
+    "articles": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Article"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Articles"
+    },
+    "content_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Hash",
+      "type": "string"
+    },
+    "retrieved_at": {
+      "format": "date-time",
+      "title": "Retrieved At",
+      "type": "string"
+    },
+    "collector_meta": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CollectorMeta"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "regulation_id",
+    "version",
+    "supersedes",
+    "source_id",
+    "source_url",
+    "issuing_authority",
+    "title_original",
+    "language_original",
+    "doc_type",
+    "status",
+    "published_date",
+    "full_text",
+    "content_hash",
+    "retrieved_at"
+  ],
+  "title": "RegulationRecord",
+  "type": "object"
+}

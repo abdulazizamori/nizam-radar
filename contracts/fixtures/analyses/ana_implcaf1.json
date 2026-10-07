@@ -1,0 +1,36 @@
+{
+  "analysis_id": "ana_implcaf1",
+  "schema_version": "1.1",
+  "regulation_id": "reg_6260105d05_v1",
+  "profile_id": "prof_demo_cafe",
+  "created_at": "2026-10-07T10:30:00+03:00",
+  "filter": {
+    "relevant": true,
+    "reason": "Technical controls for e-invoicing; relevant to VAT-registered businesses."
+  },
+  "applicability": "needs_review",
+  "confidence": "low",
+  "reasoning_summary": {
+    "ar": "القرار تقني ويخاطب في معظمه مزودي حلول الفوترة، ومتطلبات المقهى الفعلية مغطاة في الموجة 25، لذلك يحتاج إلى مراجعة بشرية.",
+    "en": "This resolution is technical and mostly addresses e-invoicing solution providers. The cafe's actual duties are covered by the Wave 25 alert, so it needs a human review."
+  },
+  "obligations": [],
+  "next_deadline": null,
+  "priority": "info",
+  "summary": {
+    "ar": "قرار الضوابط والمتطلبات الفنية للفوترة الإلكترونية. لم نتمكن من تحديد التزامات واضحة خاصة بالمقهى بثقة، يرجى المراجعة.",
+    "en": "Technical controls and requirements for e-invoicing. We could not identify clear cafe-specific obligations with confidence, so please review."
+  },
+  "checklist": [],
+  "models_used": {
+    "filter": "hand-written fixture",
+    "reasoning": "hand-written fixture",
+    "writer": "hand-written fixture"
+  },
+  "usage": {
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0
+  },
+  "notified_at": null
+}

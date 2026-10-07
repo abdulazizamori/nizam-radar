@@ -1,0 +1,75 @@
+{
+  "analysis_id": "ana_w25cafe1",
+  "schema_version": "1.1",
+  "regulation_id": "reg_9a5e4ff6ba_v1",
+  "profile_id": "prof_demo_cafe",
+  "created_at": "2026-10-07T10:30:00+03:00",
+  "filter": {
+    "relevant": true,
+    "reason": "VAT e-invoicing rule for all taxpayers above SAR 187,500; the cafe is VAT-registered."
+  },
+  "applicability": "applies",
+  "confidence": "high",
+  "reasoning_summary": {
+    "ar": "المقهى مسجل في ضريبة القيمة المضافة وإيراداته بين 375 ألف ومليون ريال، أي أعلى من حد الموجة الخامسة والعشرين (187,500 ريال).",
+    "en": "The cafe is VAT-registered with revenue between SAR 375k and 1M, above the Wave 25 threshold of SAR 187,500."
+  },
+  "obligations": [
+    {
+      "obligation_id": "obl_1",
+      "description": {
+        "ar": "ربط نظام الفوترة الإلكترونية بمنصة فاتورة قبل 1 فبراير 2027.",
+        "en": "Integrate your e-invoicing system with ZATCA's Fatoora platform by February 1, 2027."
+      },
+      "deadline": "2027-02-01",
+      "deadline_type": "fixed_date",
+      "deadline_text": "by no later than February 1, 2027",
+      "penalty": null,
+      "citation": {
+        "article_ref": null,
+        "quote": "integrate their E-invoicing solutions with the Fatoora Platform by no later than February 1, 2027.",
+        "source_url": "https://zatca.gov.sa/en/MediaCenter/News/Pages/Wave25-E-invoicing.aspx"
+      }
+    }
+  ],
+  "next_deadline": "2027-02-01",
+  "priority": "important",
+  "summary": {
+    "ar": "الموجة 25 من الفوترة الإلكترونية تشمل كل منشأة تجاوزت إيراداتها الخاضعة للضريبة 187,500 ريال في أي سنة من 2022 إلى 2025. يجب على المقهى ربط نظام نقاط البيع بمنصة فاتورة قبل 1 فبراير 2027، وستبلغكم الهيئة مباشرة.",
+    "en": "E-invoicing Wave 25 covers every business with VAT revenue above SAR 187,500 in any year from 2022 to 2025. Your cafe must connect its point-of-sale or invoicing system to ZATCA's Fatoora platform by February 1, 2027. ZATCA will notify you directly."
+  },
+  "checklist": [
+    {
+      "item_id": "chk_1",
+      "text_ar": "اسأل مزود نظام نقاط البيع إن كان متوافقًا مع المرحلة الثانية (الربط)",
+      "text_en": "Ask your POS provider whether it supports Phase Two (Integration)",
+      "due_date": "2026-11-15",
+      "done": false
+    },
+    {
+      "item_id": "chk_2",
+      "text_ar": "راقب بريدك لإشعار الهيئة عن الموجة 25",
+      "text_en": "Watch for ZATCA's Wave 25 notification",
+      "due_date": null,
+      "done": false
+    },
+    {
+      "item_id": "chk_3",
+      "text_ar": "أكمل ربط النظام بمنصة فاتورة واختبره",
+      "text_en": "Complete and test the Fatoora integration",
+      "due_date": "2027-01-15",
+      "done": false
+    }
+  ],
+  "models_used": {
+    "filter": "hand-written fixture",
+    "reasoning": "hand-written fixture",
+    "writer": "hand-written fixture"
+  },
+  "usage": {
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "cost_usd": 0.0
+  },
+  "notified_at": null
+}
