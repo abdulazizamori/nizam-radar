@@ -9,10 +9,10 @@ from __future__ import annotations
 
 import json
 import os
-import re
 from pathlib import Path
 
 from contracts.models import BusinessProfile, FilterResult, RegulationRecord
+from pipeline.jsonx import extract_json
 from pipeline.llm import LLMResponse, chat
 
 PROMPT_VERSION = "filter_v1"
@@ -40,13 +40,8 @@ def build_prompt(profile: BusinessProfile, reg: RegulationRecord) -> str:
 
 def parse(text: str) -> FilterResult | None:
     """Pull the JSON object out of the reply. Returns None if it can't."""
-    text = re.sub(r"<think>.*?</think>", "", text, flags=re.S)
-    match = re.search(r"\{.*\}", text, flags=re.S)
-    if not match:
-        return None
-    try:
-        data = json.loads(match.group(0))
-    except json.JSONDecodeError:
+    data = extract_json(text)
+    if data is None:
         return None
     relevant = data.get("relevant")
     if isinstance(relevant, str):

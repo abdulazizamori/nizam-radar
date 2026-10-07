@@ -20,3 +20,4 @@ node_modules/
 # model cache and call log (local only)
 .cache/
 logs/
+out/
