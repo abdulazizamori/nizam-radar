@@ -1,0 +1,32 @@
+# Builds the API container on every push to main and publishes it to
+# GitHub Container Registry, so Nebius Serverless can pull it.
+# Image: ghcr.io/abdulazizamori/nizam-radar-api:latest
+name: api-image
+
+on:
+  push:
+    branches: [main]
+    paths: ["api/**", "contracts/**", "pipeline/**", "requirements.txt", "Dockerfile"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/nizam-radar-api:latest
+            ghcr.io/${{ github.repository_owner }}/nizam-radar-api:${{ github.sha }}
