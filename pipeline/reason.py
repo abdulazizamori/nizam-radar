@@ -10,6 +10,7 @@ dropped, and the result becomes needs_review.
 
 from __future__ import annotations
 
+import difflib
 import json
 import os
 import re
@@ -25,7 +26,7 @@ from pipeline.filter import PROFILE_FIELDS
 from pipeline.jsonx import extract_json, has_cjk
 from pipeline.llm import LLMResponse, chat
 
-PROMPT_VERSION = "reason_v1"
+PROMPT_VERSION = "reason_v2"
 PROMPT = (Path(__file__).parent / "prompts" / f"{PROMPT_VERSION}.md").read_text(encoding="utf-8")
 QUOTE_MAX = 300
 MAX_OBLIGATIONS = 5
@@ -76,35 +77,48 @@ _SAME = str.maketrans({
 })
 
 
-def _normalise(text: str) -> tuple[str, list[int]]:
+_NOISE = re.compile(r"^[\d\W_]+$")      # tokens with no letters: "1-1", "(6000)", "•"
+_DIGITS = re.compile(r"\d+")
+
+
+def _normalise(text: str, skip_noise: bool = False) -> tuple[str, list[int]]:
     """Normalised text plus, for each of its characters, the index of the
-    original character it came from (so a match maps back to the original)."""
+    original character it came from (so a match maps back to the original).
+
+    With skip_noise, tokens that contain no letters are left out. PDF tables
+    put row numbers like "1-1" or amounts in the middle of a sentence, and
+    models quote the sentence without them.
+    """
     out, idx = [], []
-    prev_space = False
-    for i, ch in enumerate(text):
-        if ch in _DROP:
+    for m in re.finditer(r"\S+", text):
+        token = [(m.start() + j, ch) for j, ch in enumerate(m.group(0)) if ch not in _DROP]
+        if not token:
             continue
-        if ch.isspace():
-            if prev_space or not out:
-                continue
+        if skip_noise and _NOISE.match("".join(ch for _, ch in token)):
+            continue
+        if out:
             out.append(" ")
+            idx.append(m.start())
+        for i, ch in token:
+            out.append(ch.translate(_SAME).lower())
             idx.append(i)
-            prev_space = True
-            continue
-        out.append(ch.translate(_SAME).lower())
-        idx.append(i)
-        prev_space = False
-    return "".join(out).rstrip(), idx
+    return "".join(out), idx
 
 
-def _locate(fragment: str, full_text: str, norm_text: str, idx: list[int]) -> str | None:
-    nq, _ = _normalise(fragment)
+def _locate(fragment: str, full_text: str, norm_text: str, idx: list[int],
+            skip_noise: bool = False) -> str | None:
+    nq, _ = _normalise(fragment, skip_noise)
     if len(nq) < 15:
         return None
     pos = norm_text.find(nq)
     if pos == -1:
         return None
-    return full_text[idx[pos]: idx[pos + len(nq) - 1] + 1]
+    span = full_text[idx[pos]: idx[pos + len(nq) - 1] + 1]
+    # Skipping number-only tokens must never let a wrong number through:
+    # every number in the quote has to appear in the matched text.
+    if skip_noise and not set(_DIGITS.findall(fragment)) <= set(_DIGITS.findall(span)):
+        return None
+    return span
 
 
 def find_quote(quote: str, full_text: str) -> str | None:
@@ -115,23 +129,47 @@ def find_quote(quote: str, full_text: str) -> str | None:
     ta marbuta), which models often change when copying. The returned text is
     always the original span from full_text, so the stored quote is verbatim.
     If the model joined two passages with an ellipsis, the longest matching
-    piece is used.
+    piece is used. As a last resort, tokens without letters (table row
+    numbers, amounts) are skipped on both sides, as long as every number in
+    the quote is still present in the matched text.
     """
     q = _strip_quotes(quote or "")
     if len(q) < 15:          # too short to prove anything
         return None
     if q in full_text:
         return q
-    norm_text, idx = _normalise(full_text)
-    found = _locate(q, full_text, norm_text, idx)
-    if found:
-        return found
-    pieces = sorted((p.strip() for p in re.split(r"\.\.\.|…|\[\.\.\.\]", q)), key=len, reverse=True)
-    for piece in pieces:
-        found = _locate(piece, full_text, norm_text, idx)
-        if found:
-            return found
+    pieces = [q] + sorted((p.strip() for p in re.split(r"\.\.\.|…|\[\.\.\.\]", q)),
+                          key=len, reverse=True)
+    for skip_noise in (False, True):
+        norm_text, idx = _normalise(full_text, skip_noise)
+        for piece in pieces:
+            found = _locate(piece, full_text, norm_text, idx, skip_noise)
+            if found:
+                return found
     return None
+
+
+def closest_passage(quote: str, full_text: str, min_ratio: float = 0.8) -> str | None:
+    """The passage of full_text that looks most like a failed quote (same
+    number of words), to show Ultra in the repair round. None if nothing is
+    close."""
+    q_tokens = _normalise(_strip_quotes(quote))[0].split()
+    if len(q_tokens) < 3:
+        return None
+    spans = [(m.start(), m.end()) for m in re.finditer(r"\S+", full_text)]
+    words = [_normalise(full_text[a:b])[0] for a, b in spans]
+    target = " ".join(q_tokens)
+    best, best_ratio = None, min_ratio
+    n = len(q_tokens)
+    for i in range(0, max(1, len(words) - n + 1)):
+        cand = " ".join(words[i:i + n])
+        sm = difflib.SequenceMatcher(None, target, cand, autojunk=False)
+        if sm.real_quick_ratio() < best_ratio or sm.quick_ratio() < best_ratio:
+            continue
+        r = sm.ratio()
+        if r > best_ratio:
+            best, best_ratio = (spans[i][0], spans[min(i + n, len(spans)) - 1][1]), r
+    return full_text[best[0]:best[1]] if best else None
 
 
 def _trim(quote: str) -> str:
@@ -223,7 +261,13 @@ REPAIR = (
 def _repair(first: ReasonResult, data: dict, messages, resp, reg, model, calls, client) -> ReasonResult:
     """Give Ultra one chance to fix quotes that failed the check. The trust
     rule still holds: whatever comes back is checked again in code."""
-    quotes = "\n".join(f"- {q[:300]}" for q in first.failed_quotes)
+    lines = []
+    for q in first.failed_quotes:
+        lines.append(f"- {q[:300]}")
+        near = closest_passage(q, reg.full_text)
+        if near:
+            lines.append(f"  The closest passage in the text is: {near[:400]}")
+    quotes = "\n".join(lines)
     retry = messages + [{"role": "assistant", "content": resp.text},
                         {"role": "user", "content": REPAIR.format(quotes=quotes)}]
     fixed = chat("reason_repair", model, retry, max_tokens=8000, client=client)

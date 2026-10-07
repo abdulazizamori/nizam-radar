@@ -212,3 +212,25 @@ def test_still_wrong_after_repair_is_needs_review():
 def test_no_repair_call_when_quotes_are_fine():
     r = rsn.reason(profile(), reg(), client=FakeClient(ultra=[ultra_reply()]))
     assert len(r.calls) == 1
+
+
+TABLE_TEXT = "الحالات:\n1-1\nعزل أحد أنواع البكتيريا المسببة لظهور أعراض مرضية\n1-2\nمن المصابين وغرامة (6000) ريال"
+
+
+def test_find_quote_skips_table_row_numbers():
+    quote = "عزل أحد أنواع البكتيريا المسببة لظهور أعراض مرضية من المصابين"
+    span = rsn.find_quote(quote, TABLE_TEXT)
+    assert span is not None and span in TABLE_TEXT
+
+
+def test_find_quote_rejects_changed_number_across_table():
+    assert rsn.find_quote("من المصابين وغرامة (9000) ريال", TABLE_TEXT) is None
+
+
+def test_closest_passage_points_repair_at_the_real_text():
+    near = rsn.closest_passage("عزل أحد انواع البكتريا المسببة لظهور اعراض", TABLE_TEXT)
+    assert near is not None and "البكتيريا" in near
+
+
+def test_prompt_explains_not_vat_registered():
+    assert "taxable person" in rsn.PROMPT and "375,000" in rsn.PROMPT
