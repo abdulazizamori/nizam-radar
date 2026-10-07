@@ -16,3 +16,7 @@ venv/
 # node (web app)
 node_modules/
 .next/
+
+# model cache and call log (local only)
+.cache/
+logs/

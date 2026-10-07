@@ -1,0 +1,17 @@
+{
+  "_note": "Short made-up documents that a food business should NOT be alerted about. They exist only to check the Nano filter can say false. Not real regulations.",
+  "probes": [
+    {
+      "title": "Rules for licensing exploration of metallic minerals",
+      "text": "Article 1: These rules govern the issuance of exploration licences for metallic minerals including gold, copper and zinc. Article 2: An applicant must submit a geological survey, an environmental baseline study and proof of financial capacity to the Ministry of Industry and Mineral Resources. Article 3: The exploration licence is valid for five years and may be renewed once."
+    },
+    {
+      "title": "Requirements for registering unmanned aircraft above 25 kg",
+      "text": "Article 1: Every unmanned aircraft with a maximum take-off mass above 25 kilograms must be registered with the General Authority of Civil Aviation before its first flight. Article 2: The operator must hold a remote pilot certificate and maintain a flight log. Article 3: Operations beyond visual line of sight require a separate approval."
+    },
+    {
+      "title": "Admission criteria for postgraduate programs in public universities",
+      "text": "Article 1: Applicants to master's programs must hold a bachelor's degree with a minimum cumulative grade of very good. Article 2: Each university council may set additional requirements such as language tests or interviews. Article 3: Admission results are announced on the university portal before the start of the academic year."
+    }
+  ]
+}
